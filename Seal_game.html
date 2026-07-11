@@ -30,10 +30,8 @@
 
    }
   function create() { 
-    background = this.add.image(400, 300, 'snow');  
-    // seal = this.add.image(400, 300, 'seal');  
-    this.seal = this.physics.add.sprite(700, 720, 'seal');
-
+    this.background = this.add.image(800, 500, 'snow');
+    this.seal = this.physics.add.sprite(1000, 800, 'seal');
     this.fishEaten = 0;
 
     // fish eaten score:
@@ -43,22 +41,21 @@
     color: 'black'
     });
 
-    // on click, fish eaten amount increments by 1
-    this.cursor = this.input.on('pointerdown', (pointer => {
-        // console.log(this.fishEaten++);
+    this.seal.setInteractive();
+
+    this.seal.on('pointerdown', (pointer => {
+        console.log("Clicked at", pointer.x, pointer.y);
         this.fishEaten++;
         this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
     }));
-    
-    
-    // background.setScale();
-    // seal.setScale(0.5);
-    background.setDisplaySize(3000, 1360);
-    
-    
+
+    this.background.setScale(0.60);
+    this.seal.setScale(0.25);
+    this.background.setDisplaySize(2100, 1080);
 
     // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
     this.physics.world.setBounds(0, 0, 1200, 800);
+ 
   }
   function update() {
     // mini jump 
