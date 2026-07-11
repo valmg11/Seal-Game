@@ -27,7 +27,7 @@
   function preload() {
         this.load.image('snow', 'assets/Background.png');
         this.load.image('seal', 'assets/seal.png');
-        this.load.image('fish', 'assets/fih.jpeg');
+        this.load.image('fish', 'assets/Fish.png');
 
    }
   function create() { 
@@ -50,9 +50,24 @@
     this.fishGroup = this.physics.add.group();
     this.lastFishDrop = 0;
     this.fishDropDelay = 100; // milliseconds between fish spawns
-  }
 
-  function fishDrop(time) {
+    this.seal.setInteractive();
+
+    this.seal.on('pointerdown', (pointer => {
+        console.log("Clicked at", pointer.x, pointer.y);
+        this.fishEaten++;
+        this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
+    }));
+    
+    this.fishEaten = 0;
+    this.fishEatenText = this.add.text(100, 150, 'Fish Eaten: 0', {
+        fontFamily: 'Arial',
+        fontSize: '40px',
+        color: 'black'
+    });
+}
+
+function fishDrop(time) {
   if (this.input.activePointer.isDown && time > this.lastFishDrop) {
     const fish = this.fishGroup.create(800, 100, 'fish');
     fish.setScale(0.25);
@@ -73,6 +88,10 @@ function update(time) {
   } else {
       this.seal.setVelocityY(200);
   }
+
+  //let fihEaten = Number(this.fishEaten);
+  // this.seal.setScale(0.25 + (0.001 * (fihEaten)));
+
   fishDrop.call(this, time);
   this.seal.setCollideWorldBounds(true);
 }
