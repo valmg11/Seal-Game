@@ -28,72 +28,126 @@
         this.load.image('snow', 'assets/Background.png');
         this.load.image('seal', 'assets/seal.png');
         this.load.image('fish', 'assets/Fish.png');
+        this.load.image('shop', 'assets/placeholder_shop.png');
+        this.load.image('shopBackground', 'assets/shopBackgroundPlaceholder.jpg');
+        this.load.image('fih', 'assets/fih.jpeg');
 
    }
+  // create function for setting up the game scene
   function create() { 
     this.background = this.add.image(800, 500, 'snow');
     this.seal = this.physics.add.sprite(1000, 800, 'seal');
+    this.shopArrow = this.add.image(1600, 800, 'shop').setInteractive();
     
-    this.cursor = this.input.on('pointerdown', (pointer => {
+    // counts clicks as fish eaten
+    /* this.cursor = this.input.on('pointerdown', (pointer => {
         console.log("Clicked at", pointer.x, pointer.y);
         this.fishEaten++;
         this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
     }));
-    
+    */
+
+    // sets up background and seal sizes
     this.background.setScale(0.60);
     this.seal.setScale(0.25);
     this.background.setDisplaySize(2100, 1080);
     
-    // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
+    // sets up bounds for the game world
     this.physics.world.setBounds(0, 0, 1200, 800); 
 
+    // fish dropping logic
     this.fishGroup = this.physics.add.group();
     this.lastFishDrop = 0;
-    this.fishDropDelay = 100; // milliseconds between fish spawns
+    this.fishDropDelay = 200; // milliseconds between fish spawns
 
+    // sets up the seal to be interactive and handle clicks
     this.seal.setInteractive();
-
     this.seal.on('pointerdown', (pointer => {
         console.log("Clicked at", pointer.x, pointer.y);
-        this.fishEaten++;
+        this.fishEaten+=250;
         this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
+        this.sealClicked = true;
+
     }));
     
+    // fish eaten counter
     this.fishEaten = 0;
     this.fishEatenText = this.add.text(100, 150, 'Fish Eaten: 0', {
         fontFamily: 'Arial',
         fontSize: '40px',
         color: 'black'
     });
+
+    this.shopArrow.on('pointerdown', (pointer => {
+        console.log("Shop clicked at", pointer.x, pointer.y);
+        this.shopClicked = true;
+
+    const shopClickCount = 0;
+    
+    }));
 }
 
+// function to handle fish dropping
 function fishDrop(time) {
-  if (this.input.activePointer.isDown && time > this.lastFishDrop) {
-    const fish = this.fishGroup.create(800, 100, 'fish');
-    fish.setScale(0.25);
+  if (this.sealClicked === true && time > this.lastFishDrop) {
+    const fish = this.fishGroup.create(825, 100, 'fish');
+    fish.setScale(0.1);
     fish.setVelocityY(200);
+
     this.lastFishDrop = time + this.fishDropDelay;
+    this.sealClicked = false; // reset so it only fires once per click
   }
 
-  [...this.fishGroup.getChildren()].forEach((fish) => {
-    if (fish.y >= 500) {
+  this.fishGroup.getChildren().forEach((fish) => {
+    if (fish.y >= 600) {
       fish.destroy();
     }
   });
 }
 
-function update(time) {
-  if (this.input.activePointer.isDown) {
-      this.seal.setVelocityY(-100);
-  } else {
-      this.seal.setVelocityY(200);
-  }
+function shopMenu() { 
+  if (this.shopClicked === true) {
+    this.shopBackground = this.add.image(800, 500, 'shopBackground');
+    this.shopBackground.setScale(1.5);
 
+    this.background.setVisible(false);
+    this.seal.setVisible(false);
+
+
+    this.fih = this.add.image(1000, 500, 'fih').setInteractive();
+    this.fih.setScale(0.2);
+
+    this.fih.on('pointerdown', (pointer => {
+        console.log("Fih clicked at", pointer.x, pointer.y);
+        if (this.fishEaten >= 250) {
+            this.fishEaten -= 250;
+            this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
+            console.log("Fih purchased!");
+            this.fih.setTint(0xaaaaaa);
+        } else {
+            console.log("Not enough fish to purchase Fih.");
+        }
+      shopClickCount++;
+    }));
+
+  }
+}
+
+
+function update(time) {
+  if (this.sealClicked === true) {
+      this.seal.setVelocityY(-200);
+      this.sealClicked = false;
+  } else {
+      this.seal.setVelocityY(100);
+  }
+  
   //let fihEaten = Number(this.fishEaten);
   // this.seal.setScale(0.25 + (0.001 * (fihEaten)));
 
   fishDrop.call(this, time);
   this.seal.setCollideWorldBounds(true);
+  shopMenu.call(this);
 }
 </script>
 </body>
