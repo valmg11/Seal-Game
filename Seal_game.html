@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Phaser Game</title>
+  <title>Seal Game</title>
   <script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.js"></script>
 </head>
 <body>
@@ -31,11 +31,13 @@
 
    }
   function create() { 
-    this.background = this.add.image(800, 500, 'snow');  
+    this.background = this.add.image(800, 500, 'snow');
     this.seal = this.physics.add.sprite(1000, 800, 'seal');
     
     this.cursor = this.input.on('pointerdown', (pointer => {
         console.log("Clicked at", pointer.x, pointer.y);
+        this.fishEaten++;
+        this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
     }));
     
     this.background.setScale(0.60);
