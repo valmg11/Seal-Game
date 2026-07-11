@@ -24,37 +24,56 @@
 
   const game = new Phaser.Game(config);
 
-    function preload() {
+  function preload() {
         this.load.image('snow', 'assets/Background.png');
         this.load.image('seal', 'assets/seal.png');
+        this.load.image('fish', 'assets/fih.jpeg');
 
    }
   function create() { 
     this.background = this.add.image(800, 500, 'snow');  
     this.seal = this.physics.add.sprite(1000, 800, 'seal');
-
+    
     this.cursor = this.input.on('pointerdown', (pointer => {
         console.log("Clicked at", pointer.x, pointer.y);
     }));
-    
     
     this.background.setScale(0.60);
     this.seal.setScale(0.25);
     this.background.setDisplaySize(2100, 1080);
     
-    
-
     // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
-    this.physics.world.setBounds(0, 0, 1200, 800);
+    this.physics.world.setBounds(0, 0, 1200, 800); 
+
+    this.fishGroup = this.physics.add.group();
+    this.lastFishDrop = 0;
+    this.fishDropDelay = 100; // milliseconds between fish spawns
   }
-  function update() {
-    if (this.input.activePointer.isDown) {
-        this.seal.setVelocityY(-100);
-    } else {
-        this.seal.setVelocityY(200);
+
+  function fishDrop(time) {
+  if (this.input.activePointer.isDown && time > this.lastFishDrop) {
+    const fish = this.fishGroup.create(800, 100, 'fish');
+    fish.setScale(0.25);
+    fish.setVelocityY(200);
+    this.lastFishDrop = time + this.fishDropDelay;
+  }
+
+  [...this.fishGroup.getChildren()].forEach((fish) => {
+    if (fish.y >= 500) {
+      fish.destroy();
     }
-    this.seal.setCollideWorldBounds(true);
-   }
+  });
+}
+
+function update(time) {
+  if (this.input.activePointer.isDown) {
+      this.seal.setVelocityY(-100);
+  } else {
+      this.seal.setVelocityY(200);
+  }
+  fishDrop.call(this, time);
+  this.seal.setCollideWorldBounds(true);
+}
 </script>
 </body>
 </html>
