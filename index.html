@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Phaser Game</title>
+  <title>Seal Game</title>
   <script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.js"></script>
 </head>
 <body>
@@ -31,16 +31,24 @@
    }
   function create() { 
     background = this.add.image(400, 300, 'snow');  
-    // seal = this.add.image(400, 300, 'seal');  
     this.seal = this.physics.add.sprite(700, 720, 'seal');
 
+    this.fishEaten = 0;
+
+    // fish eaten score:
+    this.fishEatenText = this.add.text(100, 150, 'Fish Eaten: 0', {
+    fontFamily: 'Arial',
+    fontSize: '40px',
+    color: 'black'
+    });
+
+    // on click, fish eaten amount increments by 1
     this.cursor = this.input.on('pointerdown', (pointer => {
-        console.log("Clicked at", pointer.x, pointer.y);
+        // console.log(this.fishEaten++);
+        this.fishEaten++;
+        this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
     }));
     
-    
-    // background.setScale();
-    // seal.setScale(0.5);
     background.setDisplaySize(3000, 1360);
     
     
@@ -49,6 +57,7 @@
     this.physics.world.setBounds(0, 0, 2400, 600);
   }
   function update() {
+    // mini jump 
     if (this.input.activePointer.isDown) {
         this.seal.setVelocityY(-200);
     } else {
