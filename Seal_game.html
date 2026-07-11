@@ -9,8 +9,8 @@
 <script>
   const config = {
     type: Phaser.AUTO,        // use WebGL, fall back to Canvas automatically
-    width: 1500,
-    height: 680,
+    width: 1920,
+    height: 1080,
     physics: {
       default: 'arcade',       // simple, fast physics — good for most 2D games
       arcade: { gravity: { y: 300 }, debug: false }
@@ -25,34 +25,33 @@
   const game = new Phaser.Game(config);
 
     function preload() {
-        this.load.image('snow', 'assets/snowBackground.jpg');
+        this.load.image('snow', 'assets/Background.png');
         this.load.image('seal', 'assets/seal.png');
 
    }
   function create() { 
-    background = this.add.image(400, 300, 'snow');  
-    // seal = this.add.image(400, 300, 'seal');  
-    this.seal = this.physics.add.sprite(700, 720, 'seal');
+    this.background = this.add.image(800, 500, 'snow');  
+    this.seal = this.physics.add.sprite(1000, 800, 'seal');
 
     this.cursor = this.input.on('pointerdown', (pointer => {
         console.log("Clicked at", pointer.x, pointer.y);
     }));
     
     
-    // background.setScale();
-    // seal.setScale(0.5);
-    background.setDisplaySize(3000, 1360);
+    this.background.setScale(0.60);
+    this.seal.setScale(0.25);
+    this.background.setDisplaySize(2100, 1080);
     
     
 
     // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
-    this.physics.world.setBounds(0, 0, 2400, 600);
+    this.physics.world.setBounds(0, 0, 1200, 800);
   }
   function update() {
     if (this.input.activePointer.isDown) {
-        this.seal.setVelocityY(-200);
+        this.seal.setVelocityY(-100);
     } else {
-        this.seal.setVelocityY(100);
+        this.seal.setVelocityY(200);
     }
     this.seal.setCollideWorldBounds(true);
    }
