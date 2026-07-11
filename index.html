@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Phaser Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.js"></script>
+</head>
+<body>
+    <!-- <h1>Seal</h1> -->
+<script>
+  const config = {
+    type: Phaser.AUTO,        // use WebGL, fall back to Canvas automatically
+    width: 1500,
+    height: 680,
+    physics: {
+      default: 'arcade',       // simple, fast physics — good for most 2D games
+      arcade: { gravity: { y: 300 }, debug: false }
+    },
+    scene: {
+      preload: preload,
+      create: create,
+      update: update
+    }
+  };
+
+  const game = new Phaser.Game(config);
+
+    function preload() {
+        this.load.image('snow', 'assets/snowBackground.jpg');
+        this.load.image('seal', 'assets/seal.png');
+
+   }
+  function create() { 
+    background = this.add.image(400, 300, 'snow');  
+    // seal = this.add.image(400, 300, 'seal');  
+    this.seal = this.physics.add.sprite(700, 720, 'seal');
+
+    this.cursor = this.input.on('pointerdown', (pointer => {
+        console.log("Clicked at", pointer.x, pointer.y);
+    }));
+    
+    
+    // background.setScale();
+    // seal.setScale(0.5);
+    background.setDisplaySize(3000, 1360);
+    
+    
+
+    // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
+    this.physics.world.setBounds(0, 0, 2400, 600);
+  }
+  function update() {
+    if (this.input.activePointer.isDown) {
+        this.seal.setVelocityY(-200);
+    } else {
+        this.seal.setVelocityY(100);
+    }
+    this.seal.setCollideWorldBounds(true);
+   }
+</script>
+</body>
+</html>
