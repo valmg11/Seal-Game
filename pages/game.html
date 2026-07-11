@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Seal Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@4.2.1/dist/phaser.js"></script>
+</head>
+<body>
+<script>
+  const config = {
+    type: Phaser.AUTO,        // use WebGL, fall back to Canvas automatically
+    width: 1920,
+    height: 1080,
+    physics: {
+      default: 'arcade',       // simple, fast physics — good for most 2D games
+      arcade: { gravity: { y: 300 }, debug: false }
+    },
+    scene: {
+      preload: preload,
+      create: create,
+      update: update
+    }
+  };
+
+  const game = new Phaser.Game(config);
+
+  function preload() {
+        this.load.image('snow', '../assets/iceberg.png');
+        this.load.image('seal', '../assets/seal.png');
+        this.load.image('fish', '../assets/fish.png');
+
+   }
+  function create() { 
+    this.background = this.add.image(800, 500, 'snow');
+    this.seal = this.physics.add.sprite(1000, 800, 'seal');
+    this.fishEaten = 0;
+    
+    this.cursor = this.input.on('pointerdown', (pointer => {
+        console.log("Clicked at", pointer.x, pointer.y);
+        this.fishEaten++;
+        this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
+    }));
+    
+    
+    this.seal.setInteractive();
+    
+    this.seal.on('pointerdown', (pointer => {
+      console.log("Clicked at", pointer.x, pointer.y);
+      this.fishEaten++;
+      this.fishEatenText.setText('Fish Eaten: ' + this.fishEaten);
+    }));
+    
+    this.fishEatenText = this.add.text(100, 150, 'Fish Eaten: 0', {
+      fontFamily: 'Arial',
+      fontSize: '40px',
+      color: 'black'
+    });
+    
+    this.background.setScale(0.60);
+    this.seal.setScale(0.25);
+    this.background.setDisplaySize(2100, 1080);
+    // this.physics.world.setBounds(0, -310, 1024, 768 + 310);
+    this.physics.world.setBounds(0, 0, 1200, 800); 
+
+    this.fishGroup = this.physics.add.group();
+    this.lastFishDrop = 0;
+    this.fishDropDelay = 100; // milliseconds between fish spawns
+
+}
+
+function fishDrop(time) {
+  if (this.input.activePointer.isDown && time > this.lastFishDrop) {
+    const fish = this.fishGroup.create(800, 100, 'fish');
+    fish.setScale(0.25);
+    fish.setVelocityY(200);
+    this.lastFishDrop = time + this.fishDropDelay;
+  }
+
+  [...this.fishGroup.getChildren()].forEach((fish) => {
+    if (fish.y >= 500) {
+      fish.destroy();
+    }
+  });
+}
+
+function update(time) {
+  if (this.input.activePointer.isDown) {
+      this.seal.setVelocityY(-100);
+  } else {
+      this.seal.setVelocityY(200);
+  }
+
+  //let fihEaten = Number(this.fishEaten);
+  // this.seal.setScale(0.25 + (0.001 * (fihEaten)));
+
+  fishDrop.call(this, time);
+  this.seal.setCollideWorldBounds(true);
+}
+</script>
+</body>
+</html>
