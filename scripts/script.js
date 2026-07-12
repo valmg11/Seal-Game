@@ -1,2 +1,0 @@
-import Phaser from 'phaser';
-

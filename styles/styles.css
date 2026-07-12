@@ -1,3 +1,10 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .comic-relief-regular {
   font-family: "Comic Relief", system-ui;
   font-weight: 400;
@@ -13,21 +20,23 @@
 
 /* title screen */
 
-.title {
+.titleImg {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 15%;
+    margin-top: 5%;
+    width: 30%;
+
 }
 .titleButtonDiv {
-    margin-top: 5%;
+    margin-top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .startButton, .creditButton {
-    background-color: red;
+    background-color: #3B81F4;
     border-radius: 20px;
     width: 200px;
     height: 80px;
@@ -40,15 +49,11 @@
     text-decoration: none;
     font-size: 25px;
     font-family: "Comic Relief";
+    box-shadow: 5px 5px 5px #5c8391;
 }
 
-.startButton:hover, .creditButton:hover {
-    background-color: black;
-}
-
-.startButton {
-    /* margin-top: 20px; */
-
+.startButton:hover, .creditButton:hover, .backBtn:hover {
+    background-color: #1E3B8B;
 }
 
 .creditButton {
@@ -57,15 +62,39 @@
 
 /* credits page */
 .mainCreditsDiv {
-    margin-top: 10%;
+    margin-top: 3%;
+    background-color: white;
+    box-shadow: 5px 5px 5px #5c8391;
+    border-radius: 20px;
+    width: 90%;          /* Takes up 90% of the screen width on small mobile screens */
+    max-width: 650px;
 }
 
 .creditsMainHeader {
-    background-color: aqua;
-    font-family: "Comic Relief", system-ui;
+    background-color: #3B81F4;
+    border-radius: 20px;
+    width: 200px;
+    height: 65px;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-size: 25px;
+    font-family: "Comic Relief";
+    box-shadow: 5px 5px 5px lightblue;
 
 }
 
+.solidLineBox {
+    border: 2px solid #3B82F6;
+    padding: 25px;
+    margin-bottom: 5%;
+    border-radius: 20px;
+
+}
 .credits {
     display: flex;
     flex-direction: column;
@@ -83,5 +112,28 @@
 
 .creditsPara {
     text-align: center;
-    font-size: 15px;
+    font-size: 18px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.backBtn {
+    background-color: #3B81F4;
+    border-radius: 15px;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    font-family: "Comic Relief";
+    box-shadow: 5px 5px 5px #5c8391;
+    display: inline-block;
+    margin-top: 20px;
+    font-family: "Comic Relief", system-ui;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
